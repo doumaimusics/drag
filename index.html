@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<style type="text/css" media="screen">
+  *{padding:0;margin:0;}
+	#div1{width: 100px;height:100px;background:#ccc;position:absolute;}
+	#div2{width: 100px;height:100px;background:#f90;position:absolute;}
+	#div3{width: 100px;height:100px;background:blue;position:absolute;}
+
+</style>
+<body>
+	 <div id="div1"></div>
+	 <div id="div2"></div>
+	 <div id="div3"></div>
+
+</body>
+</html>
+<script type="text/javascript">
+	window.onload=function(){
+        drag('div1');
+        drag('div2');
+        drag('div3');
+
+	}
+
+// 限制范围的封装
+function drag(id){
+		var oDiv = document.getElementById(id);
+		var disX = 0;
+		var disY = 0;
+		oDiv.onmousedown=function(ev){
+			var oEvent = ev||event;
+			disX = oEvent.clientX-oDiv.offsetLeft;
+			disY = oEvent.clientY-oDiv.offsetTop;
+
+			document.onmousemove=function(ev){
+              var oEvent = ev||event;
+              var l = oEvent.clientX-disX;
+              var t = oEvent.clientY-disY;
+              if (l<50) {
+                 l=0;
+              } else if(l>document.documentElement.clientWidth-oDiv.offsetWidth-50){
+              	l=document.documentElement.clientWidth-oDiv.offsetWidth;
+              }
+
+              if (t<50) {
+                   t=0;
+              } else if(t>document.documentElement.clientHeight-oDiv.offsetHeight-50){
+              	t = document.documentElement.clientHeight-oDiv.offsetHeight;
+              }
+              oDiv.style.left=l+'px';
+              oDiv.style.top=t+'px';
+			}
+			document.onmouseup=function(){
+				document.onmousemove=null;
+				document.onmouseup=null;
+			}
+			return false;
+		}
+
+	}
+
+
+
+
+
+// 没有显示范围分装
+/*function drag(id)
+{
+	var oDiv=document.getElementById(id);
+	
+	oDiv.onmousedown=function (ev)
+	{
+		var oEvent=ev||event;
+		var disX=oEvent.clientX-oDiv.offsetLeft;
+		var disY=oEvent.clientY-oDiv.offsetTop;
+		
+		document.onmousemove=function (ev)
+		{
+			var oEvent=ev||event;
+			
+			oDiv.style.left=oEvent.clientX-disX+'px';
+			oDiv.style.top=oEvent.clientY-disY+'px';
+		};
+		
+		document.onmouseup=function ()
+		{
+			document.onmousemove=null;
+			document.onmouseup=null;
+		};
+	};
+}*/
+ 
+
+
+
+// jQuery写法
+/*  $(function(){ 
+    var disX = 0;
+    var disY = 0;
+    var oDiv = $('#div1');
+  	oDiv.mousedown(function(e){//鼠标按下
+       disX = e.pageX - oDiv.offset().left;//获取鼠标距离div元素左边的距离
+       disY = e.pageY - oDiv.offset().top;//获取鼠标距离div元素上边的距离
+
+       $(window).mousemove(function(e){//鼠标移动
+           var l = e.pageX-disX;//X轴方向移动的值
+           var t = e.pageY-disY;//Y轴方向移动的值
+
+           if(l<0){//判断X轴的坐标
+              l=0
+           }else if(l>$(window).width()-oDiv.innerWidth()){//判断X轴方向大于窗口的宽度减去元素的
+              l=$(window).width()>oDiv.innerWidth()
+           }
+
+           if(t<0){
+           	 t = 0;
+           }else if(t>$(window).height()>oDiv.innerHeight()){
+                t=$(window).height()>oDiv.innerHeight()
+           }
+               oDiv.css('left',l+'px');
+               oDiv.css('top',t+'px');
+    
+       })
+         
+        $(window).mouseup(function(){
+        	$(window).unbind('mousemove');
+        	$(window).unbind('mouseup');
+        	
+        })
+            return false;
+  	})
+  })
+
+*/
+
+
+</script>
